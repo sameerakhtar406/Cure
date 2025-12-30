@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community</title>
+  <style>
+    body { font-family: Arial; background: #e8f4e0; text-align: center; padding: 30px; }
+    input, button { padding: 10px; margin: 10px; border-radius: 8px; border: 1px solid #ccc; }
+    button { background: #004cff; color: white; border: none; cursor: pointer; }
+    .result { margin-top: 20px; font-size: 18px; color: #444; }
+  </style>
+</head>
+
+
+
+<body>
+  <div id="homeContainer" style="background-color: #004cff;"></div>
+<script>
+  fetch("home.html")
+    .then(res => res.text())
+    .then(html => document.getElementById("homeContainer").innerHTML = html);
+</script>
+
+  <h1 style="font-family:system-ui, -apple-system, BlinkMacSystemFont,Ubuntu, Cantarell, sans-serif;">🩺 Health Community</h1>
+
+  <!-- 💬 Form to Post a Message -->
+  <div>
+    <input type="text" id="name" placeholder="Your name" style="width: 300px ;"/> <br></br>
+    <input type="text" id="message" placeholder="Write a message" style="width: 750px  ; height: 250px;"/>
+    <button id="postBtn">Post</button>
+    <br> </br>
+  </div>
+
+  <!-- 📜 Messages will appear here -->
+  <ul id="communityFeed" style="color: #444; left: 10px; "  >  </ul>
+
+  <!-- 👇 Paste the Firebase + Firestore code here -->
+  <script type="module">
+  // Import Firebase SDKs
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+
+  // ✅ Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCeFOOeJc8uihmVmcIfIKOb8G5LTeAujjM",
+    authDomain: "cure-health-app.firebaseapp.com",
+    projectId: "cure-health-app",
+    storageBucket: "cure-health-app.appspot.com",
+    messagingSenderId: "662687904219",
+    appId: "1:662687904219:web:134ad9f32d513b5298b7fe",
+    measurementId: "G-EW8DN15BQ6"
+  };
+
+  // ✅ Initialize Firebase + Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Reference to "messages" collection
+  const messagesRef = collection(db, "messages");
+
+  // 📨 Add a new message
+  document.getElementById('postBtn').addEventListener('click', async () => {
+    const name = document.getElementById('name').value.trim();
+    const msg = document.getElementById('message').value.trim();
+
+    if (name && msg) {
+      await addDoc(messagesRef, {
+        name,
+        message: msg,
+        timestamp: serverTimestamp()
+      });
+      document.getElementById('message').value = '';
+    }
+  });
+
+  // 👀 Listen for real-time updates
+  const q = query(messagesRef, orderBy('timestamp', 'desc'));
+  const feed = document.getElementById('communityFeed');
+
+  onSnapshot(q, (snapshot) => {
+    feed.innerHTML = '';
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const li = document.createElement('li');
+      li.textContent = `${data.name}: ${data.message}`;
+      feed.appendChild(li);
+    });
+  });
+</script>
+
+</body>
+
+
+
+
+
+
+
+
+</html>

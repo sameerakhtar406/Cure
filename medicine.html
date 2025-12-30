@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Medicine Reminder</title>
+  <style>
+    body { font-family: Arial; background: #d6cdfc; text-align: center; padding: 30px; }
+    input {
+      padding: 10px; margin: 10px; border-radius: 8px; border: 1px solid #ccc; 
+    }
+    button {
+      background: #c4133f; color: white; border: none; cursor: pointer; 
+      border-radius: 5px; box-sizing: 5px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #fff;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reminder-time {
+      font-weight: bold;
+    }
+    .delete-btn {
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 5px 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Medicine Reminder</h1>
+
+  <!--Home button-->
+  <div id="homeContainer"></div>
+  <script>
+    fetch("home.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("homeContainer").innerHTML = html);
+  </script>
+
+  <label for="medicineName">Medicine Name:</label>
+  <input type="text" id="medicineName" placeholder="Enter medicine name" required />
+
+  <label for="reminderTime">Reminder Time:</label>
+  <input type="time" id="reminderTime" required />
+
+  <button id="addReminderBtn">Add Reminder</button>
+
+  <h3>Reminders</h3>
+  <ul id="reminderList"></ul>
+  <script>
+    const addReminderBtn = document.getElementById('addReminderBtn');
+    const medicineNameInput = document.getElementById('medicineName');
+    const reminderTimeInput = document.getElementById('reminderTime');
+    const reminderList = document.getElementById('reminderList');
+
+    let reminders = [];
+
+    function renderReminders() {
+      reminderList.innerHTML = '';
+      reminders.forEach((reminder, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span>${reminder.name} - <span class="reminder-time">${reminder.time}</span></span>
+          <button class="delete-btn" onclick="deleteReminder(${index})">Delete</button>
+        `;
+        reminderList.appendChild(li);
+      });
+    }
+
+    function deleteReminder(index) {
+      reminders.splice(index, 1);
+      renderReminders();
+    }
+
+    function checkReminders() {
+      const now = new Date();
+      const currentTime = now.toTimeString().slice(0, 5);
+      reminders.forEach(reminder => {
+        if (reminder.time === currentTime && !reminder.alerted) {
+          alert(`Time to take your medicine: ${reminder.name}`);
+          reminder.alerted = true;
+        }
+      });
+    }
+addReminderBtn.addEventListener('click', () => {
+      const name = medicineNameInput.value.trim();
+      const time = reminderTimeInput.value;
+      if (name && time) {
+        reminders.push({ name, time, alerted: false });
+        renderReminders();
+        medicineNameInput.value = '';
+        reminderTimeInput.value = '';
+      } else {
+        alert('Please enter both medicine name and reminder time.');
+      }
+    });
+
+    setInterval(checkReminders, 60000); // Check every minute
+
+  </script>
+</body>
+</html>

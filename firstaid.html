@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Aid</title>
+<style>
+    
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  background-color: #f0f8ff;
+}
+h1 {
+  text-align: center;
+  color: #006400;
+}
+ul {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+summary {
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #00509e;
+}
+details {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+p {
+  margin: 10px 0;
+}
+</style>
+</head>
+<body>
+
+    <!--Home Button Code-->
+    <div id="homeContainer"></div>
+    <script>
+    fetch("home.html")
+        .then(res => res.text())
+        .then(html => document.getElementById("homeContainer").innerHTML = html);
+    </script>
+
+
+<h1>First Aid Essentials</h1>
+<ul>
+  <li>Keep a well-stocked first aid kit at home and in your vehicle.</li>
+  <li>Ensure hands are clean before giving or receiving first aid.</li>
+  <li>Stay calm and assess the situation before acting.</li>
+  <li>Call for medical help if the injury appears serious. Dial 911</li>
+  <li>Learn basic CPR and wound care techniques.</li>
+</ul>
+
+<h2>Common Injuries and Solutions</h2>
+
+<details>
+  <summary>Dog Bite</summary>
+  <p>1. Wash the bite area with soap and water thoroughly.</p>
+  <p>2. Apply antiseptic like iodine or alcohol.</p>
+  <p>3. Cover with a clean bandage.</p>
+  <p>4. Seek immediate medical attention or rabies vaccination.</p>
+</details>
+
+<details>
+  <summary>Cuts and Scrapes</summary>
+  <p>1. Stop any bleeding by applying gentle pressure with a sterile cloth.</p>
+  <p>2. Clean the wound with water and mild soap.</p>
+  <p>3. Apply antiseptic and cover with a sterile bandage.</p>
+  <p>4. Change the dressing daily and watch for signs of infection.</p>
+</details>
+
+<details>
+  <summary>Burns</summary>
+  <p>1. Cool the burn under running water for 10–15 minutes.</p>
+  <p>2. Do not apply ice or toothpaste.</p>
+  <p>3. Cover with a sterile gauze.</p>
+  <p>4. If severe, seek immediate medical help.</p>
+</details>
+
+<details>
+  <summary>Nosebleed</summary>
+  <p>1. Sit and lean forward slightly.</p>
+  <p>2. Pinch the nose just below the bridge for 10 minutes.</p>
+  <p>3. Avoid tilting your head back or lying down.</p>
+  <p>4. If bleeding continues beyond 20 minutes, contact a doctor.</p>
+</details>
+
+<details>
+  <summary>Sprain</summary>
+  <p>1. Rest the injured area and avoid movement.</p>
+  <p>2. Apply ice wrapped in cloth for 15-20 minutes.</p>
+  <p>3. Compress with an elastic bandage and elevate the limb.</p>
+  <p>4. If swelling or pain persists, seek medical advice.</p>
+</details>
+
+<details>
+  <summary>Emergency Delivery</summary>
+  <p>1. Have towels or blankets ready to dry & warm the baby.
+     Make sure the mother is lying down or propped up to prevent injury from a fall.
+    Also, wash your hands thoroughly before touching the mother or baby. </p>
+
+  <p>2. When the head appears, support the perineum (the area between the vagina and anus) with a hand while gently guiding the baby's head. </p>
+  
+  <p>3.Once the head is out, check if the umbilical cord is around the baby's neck. If it is, 
+    gently try to unloop it or loosen it enough for the body to slip through. </p>
+  
+  <p>4. With the next contraction, the shoulders should emerge. You may need to apply gentle downward traction for the anterior shoulder and guide the body upward to deliver the posterior shoulder. </p>
+
+  <p>5. Do not pull/cut on the umbilical cord at this stage. </p>
+
+  <p>6. Dry the baby with a clean, warm towel and stimulate them to help them breathe. Place the baby on the mother's chest. </p>
+
+  <p>7. Stay with the mother until the placenta delivers, which may take a few minutes. Do not pull on the cord. </p>
+</details>
+
+</body>
+</html>

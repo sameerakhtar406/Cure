@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Consultation</title>
+<!--<style>
+body {font-family: Arial; background-color: #f7f9fc; margin: 0; padding: 0;}
+header {background-color: #0288d1; color: white; text-align: center; padding: 20px 0;}
+.container {width: 80%; margin: 20px auto;}
+form, .doctor-list {background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 30px; border-radius: 8px;}
+input, select, button {display: block; width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;}
+button {background-color: #0288d1; color: white; cursor: pointer;}
+button:hover {background-color: #026fa4;}
+.doctor {border-bottom: 1px solid #eee; padding: 10px 0;}
+</style>
+</head>
+<body>
+<header><h1>Doctor Consultation Portal</h1></header>
+<div class="container">
+<h2>Add Doctor</h2>
+<form id="doctorForm" onsubmit="return false;">
+<input type="text" id="doctorName" placeholder="Doctor Name" required>
+<input type="text" id="specialization" placeholder="Specialization" required>
+<button type="button" id="addDoctorBtn">Add Doctor</button>
+</form>
+
+<h2>Available Doctors</h2>
+<div id="doctorList" class="doctor-list"></div>
+
+<h2>Book Appointment</h2>
+<form id="appointmentForm" onsubmit="return false;">
+<input type="text" id="patientName" placeholder="Patient Name" required>
+<select id="selectDoctor" required></select>
+<select id="appointmentType">
+<option value="Offline">Offline</option>
+<option value="Online">Online</option>
+</select>
+<input type="date" id="appointmentDate" required>
+<button type="button" id="bookBtn">Book Appointment</button>
+</form>
+
+<div id="confirmation" style="margin-top:20px; color:green; font-weight:bold;"></div>
+</div>
+<script>
+const doctors = [];
+document.getElementById('addDoctorBtn').addEventListener('click', addDoctor);
+document.getElementById('bookBtn').addEventListener('click', bookAppointment);
+
+function addDoctor() {
+  const name = document.getElementById('doctorName').value.trim();
+  const specialization = document.getElementById('specialization').value.trim();
+  if (!name || !specialization) return;
+  
+  doctors.push({ name, specialization });
+  updateDoctorList();
+  updateSelectOptions();
+  document.getElementById('doctorForm').reset();
+}
+
+function updateDoctorList() {
+  const list = document.getElementById('doctorList');
+  list.innerHTML = '';
+  doctors.forEach(d => {
+    const div = document.createElement('div');
+    div.classList.add('doctor');
+    div.textContent = ${d.name} - ${d.specialization};
+    list.appendChild(div);
+  });
+}
+
+function updateSelectOptions() {
+  const select = document.getElementById('selectDoctor');
+  select.innerHTML = '';
+  doctors.forEach(d => {
+    const option = document.createElement('option');
+    option.value = d.name;
+    option.textContent = ${d.name} (${d.specialization});
+    select.appendChild(option);
+  });
+}
+
+function bookAppointment() {
+  const patient = document.getElementById('patientName').value.trim();
+  const doctor = document.getElementById('selectDoctor').value;
+  const type = document.getElementById('appointmentType').value;
+  const date = document.getElementById('appointmentDate').value;
+  if (!patient || !doctor || !date) return;
+  document.getElementById('confirmation').textContent = Appointment booked with ${doctor} (${type}) on ${date} for ${patient}.;
+  document.getElementById('appointmentForm').reset();
+}
+</script>
+</body>
+</html>
+
+>

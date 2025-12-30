@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cure - Home</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f8ff;
+      color: #333;
+      text-align: center;
+    }
+    header {
+      background: #8081E5;
+      color: white;
+      padding: 1.5rem 0;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      transition: transform 0.2s ease-in-out;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    .feature-card a {
+      text-decoration: none;
+      color: #0077ff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    
+    <h1><img src="logo.png" alt="logo" width="220px" height="70px"/> </h1>
+    
+    <p style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 
+    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 
+    'Helvetica Neue', sans-serif;font-size: 21px;" >Your one-stop healthcare companion </p>   
+    <!-- <p> for paragraph -->
+  </header>
+
+  <main>
+    <section class="updates" style="padding: 2rem; background: #2f9eff; border-top: 2px solid #0077ff;" >
+        <h2 style="color: rgb(254, 255, 221);">🌤 Current Air Quality Index (AQI)</h2>
+        <p id="aqiStatus">Fetching your location and air quality...</p>
+
+        <br></br> <!--Emergeny btn-->
+
+        <button id="emergencyBtn" style=" background-color:#d51c1c ;color: white;
+        border: none;border-radius: 80px;padding: 8px 14px;cursor: pointer;font-size: 16px;
+        z-index: 1000;">
+        🚨EMERGENCY
+      </button>
+        <script>
+          document.getElementById('emergencyBtn').addEventListener('click', () => {
+            alert('🚑 Calling Emergency Services...');
+            // Optional: open phone dialer (works on mobile)
+            window.location.href = 'tel:112';
+          });
+        </script>
+
+    </section>
+    
+
+    <section class="features" style="background: #c8d0f2;;" >
+      <div class="feature-card">
+        <h4>💬 Community</h4>
+        <p>Discuss health topics and connect with others.</p>
+        <a href="Community.html">Go to Community</a>
+      </div>
+
+      <div class="feature-card">
+        <h4>🌸 Menstrual Tracker</h4>
+        <p>Track your cycle and get reminders.</p>
+        <a href="Menstrual Tracker.html">Open Tracker</a>
+      </div>
+
+      <div class="feature-card">
+        <h4>🍎 Calorie Tracker</h4>
+        <p>Keep a check on your daily calorie intake.</p>
+        <a href="Calorie.html">Track Now</a>
+      </div>
+
+      <div class="feature-card">
+        <h4>💊 Medicine Reminder</h4>
+        <p>Never miss a dose again !  <br> </br>  </p>
+        <a href="medicine.html">Set Reminder</a>
+      </div>
+
+      <div class="feature-card">
+        <h4>🩹 First Aid</h4>
+        <p>Quick help for common emergencies.</p>
+        <a href="firstaid.html">Learn More</a>
+      </div>
+    </section>
+  </main>
+
+  
+<script>
+  const aqiStatus = document.getElementById('aqiStatus');
+
+  // 🔑 Replace with your OpenWeatherMap API key
+  const API_KEY = "a2a70e5f56b8ca93b9a9c84362dd7a74";
+
+  // Function to get city name from lat/lon
+  async function getCity(lat, lon) {
+    const geoUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${API_KEY}`;
+    const res = await fetch(geoUrl);
+    const data = await res.json();
+    return data[0]?.name || "Unknown Location";
+  }
+
+  // Function to get AQI
+  async function getAQI(lat, lon) {
+    const aqiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+    const res = await fetch(aqiUrl);
+    const data = await res.json();
+    const aqiValue = data.list[0].main.aqi;
+
+    // AQI meaning
+    const levels = {
+      1: { label: "Good", color: "#4CAF50" },
+      2: { label: "Fair", color: "#8BC34A" },
+      3: { label: "Moderate", color: "#FFC107" },
+      4: { label: "Poor", color: "#FF9800" },
+      5: { label: "Very Poor", color: "#fa1807" },
+    };
+
+    const level = levels[aqiValue];
+    return { aqiValue, ...level };
+  }
+
+  // Get location + display AQI + city
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        try {
+          const city = await getCity(lat, lon);
+          const aqi = await getAQI(lat, lon);
+          aqiStatus.innerHTML = `
+            📍 <b>${city} \t \t \t \t   </b>
+            \t \t  AQI: <b>${aqi.aqiValue}</b> - ${aqi.label}
+          `;
+          aqiStatus.style.background = aqi.color;
+          aqiStatus.style.color = "white";
+          aqiStatus.style.padding = "18px";
+          aqiStatus.style.borderRadius = "25px";
+          aqiStatus.style.display = "inline-block";
+        } catch (error) {
+          aqiStatus.textContent = "Error fetching data ❌";
+          console.error(error);
+        }
+      },
+      (err) => {
+        aqiStatus.textContent = "Unable to get your location ❌";
+        console.error(err);
+      }
+    );
+  } else {
+    aqiStatus.textContent = "Geolocation not supported in this browser.";
+  }
+</script>
+
+
+
+</body>
+</html>

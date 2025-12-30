@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menstrual Tracker</title>
+  <style>
+    body { font-family: Arial; background: #f4e0e9; text-align: center; padding: 30px; }
+    input, button { padding: 10px; margin: 10px; border-radius: 8px; border: 1px solid #ccc; }
+    button { background: #c4133f; color: white; border: none; cursor: pointer; }
+    .result { margin-top: 20px; font-size: 18px; color: #444; }
+  </style>
+</head>
+<body>
+  <!--Home button-->
+  <div id="homeContainer" style="background-color: #c4133f;"></div>
+  <script>
+    fetch("home.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("homeContainer").innerHTML = html);
+  </script>
+
+
+  <h1>🌸 Menstrual Tracker</h1>
+  <label>Last Period Date:</label><br>
+  <input type="date" id="lastDate"><br>
+  
+  <label>Average Cycle Length (days):</label><br>
+  <input type="number" id="cycleLength" placeholder="e.g. 28"><br>
+  
+  <button onclick="predictCycle()">Predict</button>
+  
+  <div class="result" id="result"></div>
+
+  <script>
+    function predictCycle() {
+      const lastDate = new Date(document.getElementById('lastDate').value);
+      const cycle = parseInt(document.getElementById('cycleLength').value);
+
+      if (!lastDate || !cycle) {
+        document.getElementById('result').innerHTML = "Please enter both values.";
+        return;
+      }
+
+      const nextPeriod = new Date(lastDate);
+      nextPeriod.setDate(nextPeriod.getDate() + cycle);
+
+      const ovulation = new Date(lastDate);
+      ovulation.setDate(ovulation.getDate() + (cycle - 14));
+
+      const fertileStart = new Date(ovulation);
+      fertileStart.setDate(fertileStart.getDate() - 3);
+
+      const fertileEnd = new Date(ovulation);
+      fertileEnd.setDate(fertileEnd.getDate() + 3);
+
+      document.getElementById('result').innerHTML = `
+        🌺 <b>Next Period:</b> ${nextPeriod.toDateString()}<br>
+        💮 <b>Ovulation Day:</b> ${ovulation.toDateString()}<br>
+        🌼 <b>Fertile Window:</b> ${fertileStart.toDateString()} – ${fertileEnd.toDateString()}
+      `;
+    }
+  </script>
+</body>
+</html>
